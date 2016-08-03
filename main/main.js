@@ -40,7 +40,7 @@ function countBarcodes(formattedTags) {
       result.push({barcode: formattedTag.barcode, count: formattedTag.count});
     }
     return result;
-  }, [])
+  }, []);
 
 }
 
@@ -79,7 +79,25 @@ function buildReceipt(promotedItems, {totalPayPrice, totalSaved}) {
 }
 
 function buildReceiptString(receipt) {
-  // TODO
+
+  const receiptItems = receipt.receiptItems;
+  const receiptStirng = receiptItems.map(receiptItem => {
+    return `名称：${receiptItem.name}，\
+数量：${receiptItem.count}${receiptItem.unit}，\
+单价：${formatMoney(receiptItem.price)}(元)，\
+小计：${formatMoney(receiptItem.payPrice)}(元)`;
+  }).join('\n');
+
+  return `***<没钱赚商店>收据***
+${receiptStirng}
+----------------------
+总计：${formatMoney(receipt.totalPayPrice)}(元)
+节省：${formatMoney(receipt.totalSaved)}(元)
+**********************`;
+}
+
+function formatMoney(money) {
+  return money.toFixed(2);
 }
 
 module.exports = {
